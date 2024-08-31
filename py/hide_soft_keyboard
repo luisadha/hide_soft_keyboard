@@ -1,0 +1,53 @@
+#!/usr/bin/env python
+
+import json
+import subprocess
+
+def main():
+    try:
+        # Jalankan perintah untuk mendapatkan notifikasi dalam format JSON
+        result = subprocess.run(['termux-notification-list'], capture_output=True, text=True)
+        
+        # Menguraikan hasil output sebagai JSON
+        notifications = json.loads(result.stdout)
+        
+        # Daftar nilai title untuk IME dan keyboard eksternal
+        ime_titles = {"Pilih metode masukan", "Choose input method"}
+        keyboard_external_titles = {"Mengonfigurasi keyboard fisik", "Configure physical keyboard"}
+        
+        # Cek setiap notifikasi
+        for notification in notifications:
+            title = notification.get('title', '')
+            if title in ime_titles:
+                return "IME", title
+            elif title in keyboard_external_titles:
+                return "Keyboard External", title
+        
+        return "None", None
+    
+    except json.JSONDecodeError:
+        print("Gagal menguraikan output JSON.")
+        return "Error", None
+    except FileNotFoundError:
+        print("Perintah 'termux-notification-list' tidak ditemukan. Pastikan Termux API terpasang.")
+        return "Error", None
+
+
+
+if __name__ == "__main__":
+    status, title = main()
+
+    if status == "IME":
+        print(f"IME detected:", title)
+        subprocess.run(["unset", "HISTSIZE"], shell=True)
+        subprocess.run(["input", "keyevent", "4"])
+    elif status == "Keyboard External":
+        print(f"External keyboard detected:", title)
+    elif status == "None":
+        print("No relevant title found.")
+    elif status == "Error":
+        print("An error occurred while checking notifications.")
+
+
+
+
