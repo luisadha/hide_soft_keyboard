@@ -1,4 +1,4 @@
-TARGET = py/hide_soft_keyboard
+TARGET = hide_soft_keyboard
 # Installation directories
 PREFIX ?= /usr
 BINDIR = $(PREFIX)/bin
