@@ -29,10 +29,10 @@ def main():
     except KeyboardInterrupt:
         return 1  
     except json.JSONDecodeError:
-        print("Gagal menguraikan output JSON.")
+        print("Failed to parse the JSON output.")
         return "Error", None
     except FileNotFoundError:
-        print("Perintah 'termux-notification-list' tidak ditemukan. Pastikan Termux API terpasang.")
+        print("The command 'termux-notification-list' was not found. Make sure the Termux API is installed.")
         return "Error", None
 
 
