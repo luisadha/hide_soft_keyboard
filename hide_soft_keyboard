@@ -41,7 +41,7 @@ if __name__ == "__main__":
     status, title = main()
 
     if status == "IME":
-        print(f"IME detected:", title)
+        print(f"\n")
         subprocess.run(["unset", "HISTSIZE"], shell=True)
         subprocess.run(["input", "keyevent", "4"])
     elif status == "Keyboard External":
